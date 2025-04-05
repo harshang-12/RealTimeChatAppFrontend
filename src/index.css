@@ -1,0 +1,97 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Make the layout take up the entire viewport height */
+  overflow: hidden; /* Prevent scrolling on the layout */
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden; /* Prevent scrolling in the main content area */
+}
+
+.app-content {
+  flex: 1;
+  /* padding: 20px; */
+  /* overflow: auto; Allow scrolling only within the content area */
+}
+
+header {
+  height: 60px; /* Height for the header */
+  background-color: #333; /* Adjust header background */
+  color: white; /* Adjust header text color */
+  /* padding: 10px; */
+}
+
+
+/* src/Components/AuthLayout.css */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f9;
+}
+
+.auth-content {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Styling for form header */
+.auth-content h2 {
+  text-align: center;
+  color: #4a90e2;
+  margin-bottom: 1.5rem;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
+}
+
+/* Button */
+button {
+  width: 100%;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #357abd;
+}
+
+/* Error Message */
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 1rem;
+  text-align: center;
+}

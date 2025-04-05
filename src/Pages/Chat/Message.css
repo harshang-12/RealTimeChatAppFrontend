@@ -1,0 +1,109 @@
+/* Chat container for overall layout */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 600px; /* Set a max-width for better UX */
+  margin: 0 auto; /* Center the chat window */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for modern look */
+  background-color: #ffffff; /* Set a background for the chat container */
+  overflow: hidden; /* Prevent content overflow */
+}
+
+/* Chat window to display messages */
+.chat-window {
+  flex: 1;
+  overflow-y: auto; /* Allow scrolling for long conversations */
+  padding: 15px;
+  display: flex;
+  flex-direction: column; /* Align messages vertically */
+  gap: 10px; /* Add spacing between messages */
+  background-color: #f9f9f9; /* Light background for better contrast */
+}
+
+/* Style for sent messages */
+.sent {
+  align-self: flex-end; /* Align sent messages to the right */
+  background-color: #daf8e3; /* Light green for sent messages */
+  color: #2f4f4f; /* Dark text color for readability */
+  padding: 8px 12px;
+  border-radius: 15px 15px 0 15px; /* Round edges with unique style */
+  max-width: 70%; /* Prevent messages from stretching too far */
+  word-wrap: break-word; /* Wrap long messages to fit within the bubble */
+  font-size: 14px; /* Comfortable font size */
+}
+
+/* Style for received messages */
+.received {
+  align-self: flex-start; /* Align received messages to the left */
+  background-color: #f0f0f0; /* Light gray for received messages */
+  color: #333; /* Darker text color for contrast */
+  padding: 8px 12px;
+  border-radius: 15px 15px 15px 0; /* Round edges with unique style */
+  max-width: 70%; /* Prevent messages from stretching too far */
+  word-wrap: break-word; /* Wrap long messages to fit within the bubble */
+  font-size: 14px; /* Comfortable font size */
+}
+
+/* Input container for typing area */
+.message-input {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  background-color: #ffffff; /* Match container background */
+}
+
+/* Input field for typing messages */
+.message-input input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.message-input input:focus {
+  border-color: #007bff; /* Highlight on focus */
+}
+
+/* Send button */
+.message-input button {
+  margin-left: 10px; /* Add space between input and button */
+  padding: 10px 20px;
+  background-color: #007bff; /* Blue background for primary button */
+  color: #ffffff; /* White text for contrast */
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.message-input button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.message-input button:active {
+  transform: scale(1); /* Reset scale on click */
+}
+
+/* Add scroll behavior for the chat window */
+.chat-window::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-window::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.chat-window::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}

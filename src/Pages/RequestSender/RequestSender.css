@@ -1,0 +1,125 @@
+/* Container to center the content */
+.requestContainer {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #f4f6f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Title styles */
+h3 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Loader and error message */
+.loading, .error {
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+}
+
+.loading {
+  color: #007bff;
+}
+
+.error {
+  color: #ff4d4d;
+}
+
+/* Suggestion section styles */
+.suggestion {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap if space is limited */
+  gap: 20px; /* Adds space between the profile cards */
+  justify-content: center; /* Centers the profile cards horizontally */
+  max-height: 300px; /* Limit the height */
+  overflow-y: auto; /* Add vertical scrolling */
+  padding-right: 10px; /* Add space to avoid overlap with the scrollbar */
+}
+
+/* Custom scrollbar for Webkit browsers */
+.suggestion::-webkit-scrollbar {
+  width: 8px; /* Width of the vertical scrollbar */
+  height: 8px; /* Height of the horizontal scrollbar (if needed) */
+}
+
+.suggestion::-webkit-scrollbar-thumb {
+  background-color: #007bff; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+.suggestion::-webkit-scrollbar-thumb:hover {
+  background-color: #0056b3; /* Darker color on hover */
+}
+
+.suggestion::-webkit-scrollbar-track {
+  background-color: #f4f6f9; /* Background of the scrollbar track */
+  border-radius: 10px; /* Rounded corners for the track */
+}
+
+/* For Firefox */
+.suggestion {
+  scrollbar-width: thin; /* Thin scrollbar */
+  scrollbar-color: #007bff #f4f6f9; /* Thumb color and track color */
+}
+
+/* User profile card */
+.userProfile {
+  display: flex;
+  flex-direction: column; /* Align the profile content vertically */
+  justify-content: space-between; /* Distribute space evenly */
+  align-items: center; /* Center the content horizontally */
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+  width: 250px; /* Set fixed width for each profile card */
+  text-align: center;
+}
+
+.userProfile:hover {
+  background-color: #f1f1f1;
+}
+
+/* Left side: user information */
+.userProfile div:first-child {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.userProfile div:nth-child(2) {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Button to send request */
+.sendBtn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.sendBtn:hover {
+  background-color: #0056b3;
+}
+
+/* Disabled button */
+.sendBtn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

@@ -1,0 +1,62 @@
+.receiverContainer {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .loading,
+  .error {
+    text-align: center;
+    color: #333;
+  }
+  
+  .requestList {
+    margin-top: 20px;
+  }
+  
+  .requestCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #fff;
+  }
+  
+  .requestCard div {
+    flex: 1;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .acceptBtn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .declineBtn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .acceptBtn:hover,
+  .declineBtn:hover {
+    opacity: 0.8;
+  }
+  
