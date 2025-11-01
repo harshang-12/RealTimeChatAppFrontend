@@ -1,59 +1,128 @@
-// Login.js
 import React, { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Input,
+  Button,
+  VStack,
+  Text,
+  useToast,
+  FormControl,
+  FormLabel,
+} from "@chakra-ui/react";
 import { useUser } from "./Context/UserContext";
-// import './styles.css'; // Import the CSS file
 
 const Login = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
   const { setToken } = useUser();
+  const navigate = useNavigate();
+  const toast = useToast();
+
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleLogin = async () => {
+    const { username, password } = formData;
+
+    if (!username || !password) {
+      toast({
+        title: "Please fill in all fields.",
+        status: "warning",
+        duration: 2500,
+        isClosable: true,
+      });
+      return;
+    }
+
     try {
-      setError("");
+      setLoading(true);
       const response = await axios.post(`${apiUrl}/login`, {
         username,
         password,
-      });
-      console.log("response :", response.data);
-      //   setUser(response.data); // Save user to state
+      } , { withCredentials: true });
+
+      console.log(response);
+      
+
       setToken(response.data.token);
-      alert("Login successful!");
+
+      toast({
+        title: "Login successful!",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+
       navigate("/app/chat/");
     } catch (err) {
-      setError(
-        err.response?.data?.error || "Login failed. Check your credentials."
-      );
+      toast({
+        title: "Login failed.",
+        description: err.response?.data?.error || "Invalid credentials.",
+        status: "error",
+        duration: 2500,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container">
-      <h2>Login</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      {error && <p className="error">{error}</p>}
-      <button onClick={handleLogin}>Login</button>
+    <Box w="100%">
+      <VStack spacing={5} align="stretch">
+        <FormControl>
+          <FormLabel>Username</FormLabel>
+          <Input
+            name="username"
+            placeholder="Enter username"
+            value={formData.username}
+            onChange={handleChange}
+            focusBorderColor="blue.400"
+          />
+        </FormControl>
 
-      <Link to={`/register`}>register</Link>
-    </div>
+        <FormControl>
+          <FormLabel>Password</FormLabel>
+          <Input
+            name="password"
+            type="password"
+            placeholder="Enter password"
+            value={formData.password}
+            onChange={handleChange}
+            focusBorderColor="blue.400"
+          />
+        </FormControl>
+
+        <Button
+          colorScheme="blue"
+          size="md"
+          w="100%"
+          onClick={handleLogin}
+          isLoading={loading}
+          loadingText="Logging in..."
+        >
+          Login
+        </Button>
+
+        <Text fontSize="sm" textAlign="center">
+          Don't have an account?{" "}
+          <Button
+            variant="outline"
+            colorScheme="blue"
+            onClick={() => navigate("/register")}
+          >
+            Register
+          </Button>
+        </Text>
+      </VStack>
+    </Box>
   );
 };
 

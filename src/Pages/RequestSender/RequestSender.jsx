@@ -1,140 +1,188 @@
 import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Button,
+  Spinner,
+  VStack,
+  HStack,
+  useToast,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import axios from "axios";
-import { useUser } from "../../Components/Context/UserContext"; // Import useUser context
-import "./RequestSender.css"; // Import the external CSS file
+import { useUser } from "../../Components/Context/UserContext";
 
 function RequestSender() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState("");
 
   const { token } = useUser();
-
-  // Get the API URL from environment variables
   const apiUrl = import.meta.env.VITE_API_URL;
+  const toast = useToast();
+
+  const cardBg = useColorModeValue("white", "gray.800");
+  const borderCol = useColorModeValue("gray.200", "gray.700");
 
   useEffect(() => {
-    // Function to fetch all users
     const fetchUsers = async () => {
       try {
         const response = await axios.get(`${apiUrl}/user/all-users`, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Attach the token as Bearer token
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-        setUsers(response.data); // Set the fetched users data
+        setUsers(response.data);
       } catch (err) {
-        setError("Failed to fetch users");
         console.error(err);
+        setError("Failed to fetch users");
       } finally {
-        setLoading(false); // Set loading to false once the request is completed
+        setLoading(false);
       }
     };
 
-    fetchUsers(); // Call the function to fetch users when the component is mounted
-  }, [apiUrl, token]); // Dependency array ensures it runs once when the component mounts
+    fetchUsers();
+  }, [apiUrl, token]);
 
-  // Function to send friend request
   const handleSendRequest = async (receiverId) => {
     try {
-      setSuccessMessage(""); // Clear any previous success message
       await axios.post(
         `${apiUrl}/user/send-request`,
         { receiverId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Attach the token
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setSuccessMessage("Friend request sent successfully!"); // Success message
-
-      // Update the user's status locally
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === receiverId ? { ...user, status: "request_sent" } : user
+      setUsers((prev) =>
+        prev.map((u) =>
+          u._id === receiverId ? { ...u, status: "request_sent" } : u
         )
       );
+
+      toast({
+        title: "Friend request sent!",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
     } catch (err) {
-      console.error(err);
-      setError(
-        err.response?.data?.message || "Failed to send friend request"
-      );
+      toast({
+        title: err.response?.data?.message || "Failed to send request",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
     }
   };
 
-  // Function to unfriend
   const handleUnfriend = async (friendId) => {
     try {
-      setSuccessMessage(""); // Clear any previous success message
       await axios.post(
-        `${apiUrl}/user/unfriend`,
+        `${apiUrl}/user/remove-friend`,
         { friendId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Attach the token
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setSuccessMessage("Unfriended successfully!"); // Success message
-
-      // Update the user's status locally
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === friendId ? { ...user, status: "not_sent" } : user
+      setUsers((prev) =>
+        prev.map((u) =>
+          u._id === friendId ? { ...u, status: "not_sent" } : u
         )
       );
+
+      toast({
+        title: "Removed friend successfully!",
+        status: "info",
+        duration: 2000,
+        isClosable: true,
+      });
     } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || "Failed to unfriend");
+      toast({
+        title: err.response?.data?.message || "Failed to unfriend",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
     }
   };
 
   return (
-    <div className="requestContainer">
-      <h3>Your Suggestions</h3>
+    <Box
+      p={{ base: 4, md: 6 }}
+      bg={useColorModeValue("gray.50", "gray.900")}
+      minH="100vh"
+    >
+      <Heading size="lg" mb={6} color="blue.600" textAlign="center">
+        User Suggestions
+      </Heading>
 
-      {loading && <p className="loading">Loading...</p>}
-      {error && <p className="error">{error}</p>}
-      {successMessage && <p className="success">{successMessage}</p>}
+      {loading ? (
+        <Flex justify="center" align="center" h="60vh">
+          <Spinner size="xl" color="blue.500" />
+        </Flex>
+      ) : error ? (
+        <Text color="red.500" textAlign="center">
+          {error}
+        </Text>
+      ) : users.length === 0 ? (
+        <Text color="gray.500" textAlign="center">
+          No users available.
+        </Text>
+      ) : (
+        <VStack spacing={4} align="stretch" maxW="700px" mx="auto">
+          {users.map((user) => (
+            <Flex
+              key={user._id}
+              p={4}
+              border="1px solid"
+              borderColor={borderCol}
+              borderRadius="lg"
+              bg={cardBg}
+              justify="space-between"
+              align="center"
+              boxShadow="sm"
+              _hover={{ boxShadow: "md" }}
+            >
+              <Box>
+                <Text fontWeight="bold" fontSize="md">
+                  {user.username}
+                </Text>
+                <Text fontSize="sm" color="gray.500">
+                  {user.email}
+                </Text>
+              </Box>
 
-      <div className="suggestion">
-        {!loading &&
-          !error &&
-          users.map((user) => (
-            <div className="userProfile" key={user._id}>
-              <div>
-                <strong>{user.username}</strong>
-                <div>({user.email})</div>
-              </div>
-              {user.status === "not_sent" && (
-                <button
-                  className="sendBtn"
-                  onClick={() => handleSendRequest(user._id)}
-                >
-                  Send Request
-                </button>
-              )}
-              {user.status === "request_sent" && (
-                <button className="pendingBtn" disabled>
-                  Pending
-                </button>
-              )}
-              {user.status === "friend" && (
-                <button
-                  className="unfriendBtn"
-                  onClick={() => handleUnfriend(user._id)}
-                >
-                  Unfriend
-                </button>
-              )}
-            </div>
+              <HStack spacing={3}>
+                {user.status === "not_sent" && (
+                  <Button
+                    colorScheme="blue"
+                    size="sm"
+                    onClick={() => handleSendRequest(user._id)}
+                  >
+                    Send Request
+                  </Button>
+                )}
+
+                {user.status === "request_sent" && (
+                  <Button colorScheme="gray" size="sm" disabled>
+                    Pending
+                  </Button>
+                )}
+
+                {user.status === "friend" && (
+                  <Button
+                    colorScheme="red"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleUnfriend(user._id)}
+                  >
+                    Unfriend
+                  </Button>
+                )}
+              </HStack>
+            </Flex>
           ))}
-      </div>
-    </div>
+        </VStack>
+      )}
+    </Box>
   );
 }
 
