@@ -37,7 +37,8 @@ const Messages = ({ selectedFriend }) => {
   useEffect(() => {
     if (!selectedFriend || !user) return;
 
-    const socket = new WebSocket(`ws://localhost:8000`);
+    // const socket = new WebSocket(`ws://localhost:8000`);
+    const socket = new WebSocket(import.meta.env.VITE_WS_URL);
     ws.current = socket;
 
     socket.onopen = () => {
