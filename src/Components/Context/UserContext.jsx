@@ -17,11 +17,13 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null); // State to store user data
   const [token, setToken] = useState(null);
 
+  const [ ischatsection, setIschatsection ] = useState(false); // State to store user data
+
 
   
 
   return (
-    <UserContext.Provider value={{ user, setUser, setToken, token }}>
+    <UserContext.Provider value={{ user, setUser, setToken, token , setIschatsection , ischatsection}}>
       {children}
     </UserContext.Provider>
   );

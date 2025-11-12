@@ -17,8 +17,8 @@ const MotionBox = motion(Box);
 const AppLayout = () => {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
-  const { token, setToken, setUser } = useUser();
-  const { key } = useLocation(); 
+  const { token, setToken, setUser, ischatsection } = useUser();
+  const { key } = useLocation();
   const navigate = useNavigate();
   const fetchUser = async () => {
     try {
@@ -26,11 +26,11 @@ const AppLayout = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        
+
       }, { withCredentials: true });
-      
+
       setUser(response.data);
-      
+
     } catch (err) {
       console.error(err);
       setToken(null);
@@ -40,12 +40,21 @@ const AppLayout = () => {
 
   useEffect(() => {
     fetchUser();
-  }, [token , key]);
+  }, [token, key]);
 
   return (
-    <Flex direction="column" height="100vh" bg="gray.50" >
+    <Flex
+      direction="column"
+      height="100vh"
+      bg="gray.50"
+      overflow="hidden"
+    >
       {/* Main Content */}
-      <Flex flex="1" overflow="hidden">
+      <Flex
+        flex="1"
+        overflow="hidden"
+        height={ischatsection && isMobile ? "100vh" : "auto"}
+      >
         <AnimatePresence initial={false}>
           {!isMobile && (
             <MotionBox
@@ -60,7 +69,12 @@ const AppLayout = () => {
           )}
         </AnimatePresence>
 
-        <Box flex="1" p={0} overflowY="auto">
+        <Box
+          flex="1"
+          p={0}
+          overflowY="auto"
+          height={ischatsection && isMobile ? "100vh" : "auto"}
+        >
           <Routes>
             <Route path="chat" element={<Chat />} />
             <Route path="request-receiver" element={<RequestReceiver />} />
@@ -72,7 +86,7 @@ const AppLayout = () => {
 
       {/* Bottom Navigation for Mobile */}
       <AnimatePresence>
-        {isMobile && (
+        {isMobile && !ischatsection && (
           <MotionBox
             key="bottom-nav"
             initial={{ y: 80, opacity: 0 }}

@@ -20,7 +20,7 @@ import axios from "axios";
 import Messages from "./Messages";
 
 function Chat() {
-  const { user, token } = useUser();
+  const { user, token, setIschatsection , ischatsection } = useUser();
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const [friends, setFriends] = useState([]);
@@ -41,8 +41,14 @@ function Chat() {
     }
   };
 
-  const handleFriendClick = (friend) => setSelectedFriend(friend);
-  const handleBackToList = () => setSelectedFriend(null);
+  const handleFriendClick = (friend) => {
+    setIschatsection(true);
+    setSelectedFriend(friend)
+  };
+  const handleBackToList = () => {
+    setIschatsection(false);
+    setSelectedFriend(null);
+  }
 
   useEffect(() => {
     fetchFriends();
@@ -57,7 +63,7 @@ function Chat() {
 
   return (
     <Flex
-      h={{ base: "calc(100vh - 64px)", md: "100vh" }}
+      h={{ base: ischatsection ? "100vh" : "calc(100vh - 64px)", md: "100vh" }}
       bg={bgChat}
       p={0}
       overflow="hidden"
@@ -133,7 +139,7 @@ function Chat() {
         bg="white"
         borderLeft={{ base: "none", lg: "1px solid" }}
         borderColor="gray.200"
-        p={4}
+        p={1}
         overflow="hidden"
         display={{ base: selectedFriend ? "flex" : "none", lg: "flex" }}
       >
