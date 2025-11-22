@@ -178,7 +178,6 @@ const Messages = ({ selectedFriend }) => {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          
         />
         <IconButton  w={'50px'} icon={<ArrowForwardIcon />} aria-label="Send" colorScheme="blue" onClick={() => sendMessage()} />
       </HStack>
