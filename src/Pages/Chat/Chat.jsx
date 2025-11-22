@@ -180,7 +180,6 @@ function Chat() {
                 </Heading>
               </HStack>
             </Flex>
-
             {/* Messages */}
             <Box flex="1" overflowY="auto">
               <Messages selectedFriend={selectedFriend} />
