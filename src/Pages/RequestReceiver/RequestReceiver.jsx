@@ -26,22 +26,22 @@ function RequestReceiver() {
   const cardBg = useColorModeValue("white", "gray.800");
   const borderCol = useColorModeValue("gray.200", "gray.700");
 
+  const fetchRequests = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/user/received-requests`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setRequests(response.data);
+    } catch (err) {
+      setError("Failed to fetch received requests");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/user/received-requests`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setRequests(response.data);
-      } catch (err) {
-        setError("Failed to fetch received requests");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
 
     fetchRequests();
   }, [apiUrl, token]);
@@ -55,7 +55,7 @@ function RequestReceiver() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setRequests((prev) => prev.filter((req) => req._id !== senderId));
+      setRequests((prev) => prev.filter((req) => req.sender._id !== senderId));
       toast({
         title: "Friend request accepted!",
         status: "success",
@@ -82,7 +82,7 @@ function RequestReceiver() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setRequests((prev) => prev.filter((req) => req._id !== senderId));
+      setRequests((prev) => prev.filter((req) => req.sender._id !== senderId));
       toast({
         title: "Friend request declined",
         status: "info",
@@ -126,7 +126,7 @@ function RequestReceiver() {
         <VStack spacing={4} align="stretch" maxW="600px" mx="auto">
           {requests.map((request) => (
             <Flex
-              key={request._id}
+              key={request.sender._id}
               p={4}
               border="1px solid"
               borderColor={borderCol}
@@ -138,9 +138,9 @@ function RequestReceiver() {
               _hover={{ boxShadow: "md" }}
             >
               <Box>
-                <Text fontWeight="bold">{request.username}</Text>
+                <Text fontWeight="bold">{request.sender.username}</Text>
                 <Text fontSize="sm" color="gray.500">
-                  {request.email}
+                  {request.sender.email}
                 </Text>
               </Box>
 
@@ -148,7 +148,7 @@ function RequestReceiver() {
                 <Button
                   colorScheme="blue"
                   size="sm"
-                  onClick={() => handleAccept(request._id)}
+                  onClick={() => handleAccept(request.sender._id)}
                 >
                   Accept
                 </Button>
@@ -156,7 +156,7 @@ function RequestReceiver() {
                   colorScheme="red"
                   size="sm"
                   variant="outline"
-                  onClick={() => handleDecline(request._id)}
+                  onClick={() => handleDecline(request.sender._id)}
                 >
                   Decline
                 </Button>
